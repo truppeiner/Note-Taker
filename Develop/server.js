@@ -27,6 +27,16 @@ app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'))
 });
 
+// get route to return index.html 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+});
+
+// post route to create notes 
+app.post('/api/notes', (req, res) => {
+
+})
+
 app.listen(PORT, () => {
     console.log("server is now live on port 3001!");
 })
