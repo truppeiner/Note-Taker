@@ -3,9 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const res = require('express/lib/response');
 let db = require('./db/db.json');
-
-const { query } = require('express');
-const { parse } = require('path');
+const uniqid = require('uniqid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -19,7 +17,6 @@ app.use(express.json());
 // first get route get all notes
 app.get('/api/notes', (req, res) => {
     res.json(db);
-    console.log(db);
 })
 
 // get route to return notes.html
@@ -34,7 +31,15 @@ app.get('*', (req, res) => {
 
 // post route to create notes 
 app.post('/api/notes', (req, res) => {
-
+    // creates uniqueID 
+    let createdNote = req.body
+    createdNote.id = uniqid();
+    db.push(createdNote);
+    console.log(db);
+    // rewrites db based on created note 
+    fs.writeFile('./db/db.json', JSON.stringify(db), () => {
+        res.send(createdNote);
+    })
 })
 
 app.listen(PORT, () => {
